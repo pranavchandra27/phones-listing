@@ -6,7 +6,8 @@
     "model": "4",
     "releaseYear": 2010,
     "startPrice": 199,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-4-ofic-2.jpg"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "model": "4s",
     "releaseYear": 2011,
     "startPrice": 199,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-4s-all-sides.jpg"
   },
   {
     "id": 3,
@@ -24,7 +26,8 @@
     "model": "5",
     "startPrice": 199,
     "releaseYear": 2012,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-5-white.jpg"
   },
   {
     "id": 4,
@@ -33,7 +36,8 @@
     "model": "8",
     "startPrice": 699,
     "releaseYear": 2018,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-8-new-1.jpg"
   },
   {
     "id": 5,
@@ -42,7 +46,8 @@
     "model": "X",
     "startPrice": 999,
     "releaseYear": 2017,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-x-new-1.jpg"
   },
   {
     "id": 6,
@@ -51,7 +56,8 @@
     "model": "XS",
     "releaseYear": 2018,
     "startPrice": 999,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-xs-max-5.jpg"
   },
   {
     "id": 7,
@@ -60,7 +66,8 @@
     "model": "11",
     "releaseYear": 2019,
     "startPrice": 699,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-11-1.jpg"
   },
   {
     "id": 8,
@@ -69,7 +76,8 @@
     "model": "12",
     "releaseYear": 2020,
     "startPrice": 799,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-12-r1.jpg"
   },
   {
     "id": 9,
@@ -78,7 +86,8 @@
     "model": "13",
     "releaseYear": 2021,
     "startPrice": 799,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-13-01.jpg"
   },
   {
     "id": 10,
@@ -87,7 +96,8 @@
     "os": "android",
     "startPrice": 699,
     "releaseYear": 2019,
-    "score": 9
+    "score": 9,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/huawei/huawei-p30-1.jpg"
   },
 
   {
@@ -97,7 +107,8 @@
     "os": "android",
     "startPrice": 899,
     "releaseYear": 2020,
-    "score": 7
+    "score": 7,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/huawei/huawei-p40-01.jpg"
   },
   {
     "id": 12,
@@ -106,7 +117,8 @@
     "os": "android",
     "startPrice": 999,
     "releaseYear": 2020,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s20-5g-r1.jpg"
   },
   {
     "id": 13,
@@ -115,7 +127,8 @@
     "os": "android",
     "startPrice": 799,
     "releaseYear": 2021,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s21-5g-0.jpg"
   },
   {
     "id": 14,
@@ -124,6 +137,7 @@
     "os": "android",
     "startPrice": 799,
     "releaseYear": 2022,
-    "score": 10
+    "score": 10,
+    "imageURL": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s22-5g-2.jpg"
   }
 ]

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Typography,
@@ -8,47 +8,38 @@ import {
   CircularProgress,
   Grid,
   Container,
-  Autocomplete,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-
 import Stack from "@mui/material/Stack";
 import axios from "axios";
+import { upperFirst, startCase } from "lodash";
+
+import { PhoneContext } from "../context";
 
 const Calculations = () => {
+  const { selectedCurrency, selectedPhone } = useContext(PhoneContext);
   const [formData, setFormData] = useState({
-    brand: "",
-    model: "",
-    os: "",
-    releaseYear: "",
-    startScore: "",
-    startPrice: "",
+    brand: selectedPhone?.brand || "",
+    model: selectedPhone?.model || "",
+    os: selectedPhone?.os || "",
+    releaseYear: selectedPhone?.releaseYear || "",
+    startScore: selectedPhone?.score || "",
+    startPrice: selectedPhone?.startPrice || "",
     condition: "",
-    currency: {},
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [priceData, setPriceData] = useState(null);
-  const [currencies, setCurrencies] = useState([]);
-  const [selectedCurrency, setSelectedCurrency] = useState(null);
 
   const [fieldErrors, setFieldErrors] = useState({});
 
   const API_URL = "https://softcamp.hu/webler/arkalkulator.php";
-
-  useEffect(() => {
-    (() => {
-      axios
-        .get(`https://api.coinstats.app/public/v1/fiats`)
-        .then((res) => {
-          setCurrencies(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    })();
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -126,7 +117,7 @@ const Calculations = () => {
       <Container maxWidth="md">
         <Box mt={2}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={priceData ? 6 : 12}>
               <Paper>
                 <Box sx={{ padding: 2 }}>
                   <Typography align="center" variant="h4">
@@ -232,119 +223,103 @@ const Calculations = () => {
               </Paper>
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <Paper elevation={0}>
-                <Box padding={2}>
-                  <Typography variant="h5" align="center">
-                    Phone Details
-                  </Typography>
+            {priceData && (
+              <Grid item xs={12} sm={6}>
+                <Paper elevation={1}>
+                  <Box padding={2}>
+                    <Typography variant="h5" align="center">
+                      Phone Details
+                    </Typography>
 
-                  <Box mt={2}>
-                    {priceData?.error ? (
-                      <Typography align="center" color="error">
-                        {priceData?.error}
-                      </Typography>
-                    ) : priceData?.data ? (
-                      <Grid container spacing={2} sx={{ mt: 2 }}>
-                        <Grid xs={12}>
-                          <Autocomplete
-                            disablePortal
-                            options={currencies}
-                            value={selectedCurrency ? selectedCurrency : ""}
-                            getOptionLabel={(option) =>
-                              option ? option?.name : ""
-                            }
-                            size="small"
-                            fullWidth
-                            onChange={(_, newVal) => {
-                              setSelectedCurrency(newVal);
-                            }}
-                            renderOption={(props, option) => (
-                              <Box
-                                component="li"
-                                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                                {...props}
-                              >
-                                <img
-                                  loading="lazy"
-                                  width="20"
-                                  src={option.imageUrl}
-                                  srcSet={`${option.imageUrl} 2x`}
-                                  alt=""
-                                />
-                                {option?.name}
+                    <Box mt={2}>
+                      {priceData?.error ? (
+                        <Typography align="center" color="error">
+                          {upperFirst(priceData?.error)}
+                        </Typography>
+                      ) : priceData?.data ? (
+                        <Box sx={{ mt: 2 }}>
+                          <Typography variant="h6">
+                            {upperFirst(priceData?.data.brand)}{" "}
+                            {upperFirst(priceData?.data.model)} (
+                            {priceData?.data.releaseYear})
+                            {/* {priceData?.data.startPrice} */}
+                          </Typography>
+                          <Box>
+                            <Typography>OS: {priceData?.data.os}</Typography>
+                            <Typography>
+                              Score: {priceData?.data.score || "N/A"}
+                            </Typography>
+
+                            <Box mt={3}>
+                              <Typography>Recommended Price:</Typography>
+                              <Box sx={{ display: "flex" }}>
+                                <sub style={{ fontSize: "1rem" }}>
+                                  {selectedCurrency.symbol}
+                                </sub>
+                                <Typography variant="h4">
+                                  {selectedCurrency?.name === "USD"
+                                    ? priceData?.data.recommendedPrice
+                                    : Math.floor(
+                                        selectedCurrency.rate *
+                                          priceData?.data.recommendedPrice
+                                      )}
+                                </Typography>
                               </Box>
-                            )}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                required
-                                label="Change Currency"
-                              />
-                            )}
-                          />
-                        </Grid>
-                        <Grid item xs={6}>
-                          <b>Brand</b>: {priceData?.data?.brand}
-                        </Grid>
-                        <Grid item xs={6}>
-                          <b>Model</b>: {priceData?.data?.model}
-                        </Grid>
-                        <Grid item xs={6}>
-                          <b>OS</b>: {priceData?.data?.os}
-                        </Grid>
-                        <Grid item xs={6}>
-                          <b>Release Year</b>: {priceData?.data?.releaseYear}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <b>Recommended Price</b>:{" "}
-                          {selectedCurrency
-                            ? selectedCurrency.symbol + " "
-                            : "$ "}
-                          {selectedCurrency
-                            ? Math.floor(
-                                selectedCurrency.rate *
-                                  priceData?.data?.recommendedPrice
-                              )
-                            : priceData?.data?.recommendedPrice}
-                        </Grid>
+                            </Box>
+                          </Box>
 
-                        <Grid xs={12} sx={{ p: 2 }}>
-                          <Typography variant="h6">Pricing</Typography>
-                          <Grid container spacing={2}>
-                            {priceData?.data.details.map(
-                              ({ price, year }, index) => {
-                                return (
-                                  <React.Fragment key={index}>
-                                    <Grid item xs={6}>
-                                      <b>Price</b>:{" "}
-                                      {selectedCurrency
-                                        ? selectedCurrency.symbol + " "
-                                        : "$ "}
-                                      {selectedCurrency
-                                        ? Math.floor(
-                                            selectedCurrency.rate *
-                                              priceData?.data?.recommendedPrice
-                                          )
-                                        : priceData?.data?.recommendedPrice}
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                      <b>Year</b>: {year}
-                                    </Grid>
-                                  </React.Fragment>
-                                );
-                              }
-                            )}
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    ) : (
-                      <Typography align="center">No information</Typography>
-                    )}
+                          <Box mt={3}>
+                            <Typography variant="h6">Pricing flow</Typography>
+                            <TableContainer component={Paper}>
+                              <Table
+                                sx={{ minWidth: 200 }}
+                                size="small"
+                                aria-label="a dense table"
+                              >
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>Year</TableCell>
+                                    <TableCell align="right">Price</TableCell>
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  {priceData?.data.details.map(
+                                    ({ price, year }) => (
+                                      <TableRow
+                                        key={year}
+                                        sx={{
+                                          "&:last-child td, &:last-child th": {
+                                            border: 0,
+                                          },
+                                        }}
+                                      >
+                                        <TableCell component="th" scope="row">
+                                          {year}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          {selectedCurrency.symbol}
+                                          {selectedCurrency === "USD"
+                                            ? price
+                                            : Math.floor(
+                                                selectedCurrency.rate * price
+                                              )}
+                                        </TableCell>
+                                      </TableRow>
+                                    )
+                                  )}
+                                </TableBody>
+                              </Table>
+                            </TableContainer>
+                          </Box>
+                        </Box>
+                      ) : (
+                        <Typography align="center">No information</Typography>
+                      )}
+                    </Box>
                   </Box>
-                </Box>
-              </Paper>
-            </Grid>
+                </Paper>
+              </Grid>
+            )}
           </Grid>
         </Box>
       </Container>
