@@ -1,16 +1,18 @@
 import React, { useContext } from "react";
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 
 import PHONE_DATA from "../phones_schema.json";
 import { PhoneContext } from "../context";
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
   const { setSelectedPhone, selectedPhone, selectedCurrency } =
     useContext(PhoneContext);
+  const navigate = useNavigate();
   return (
     <Box my={4}>
       <Container maxWidth="lg">
-        <Grid container spacing={2} sx={{mt: 2}}>
+        <Grid container spacing={2} sx={{ mt: 2 }}>
           {PHONE_DATA.map((phone) => (
             <Grid item xs={12} md={6}>
               <Box
@@ -19,13 +21,13 @@ const Products = () => {
                 sx={{
                   background:
                     selectedPhone?.id === phone.id ? "#eeeeee" : "white",
-                    mt: 2
+                  mt: 2,
                 }}
               >
                 <Grid
                   container
                   spacing={2}
-                  sx={{ cursor: "pointer", p: 2}}
+                  sx={{ cursor: "pointer", p: 2 }}
                   onClick={() => {
                     if (selectedPhone?.id === phone.id) {
                       setSelectedPhone(null);
@@ -63,6 +65,20 @@ const Products = () => {
                                 selectedCurrency.rate * phone.startPrice
                               )}
                         </Typography>
+                      </Box>
+
+                      <Box mt={2}>
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPhone(phone);
+                            navigate("/calculations");
+                          }}
+                          size="small"
+                          variant="outlined"
+                        >
+                          Calculate Price
+                        </Button>
                       </Box>
                     </Box>
                   </Grid>

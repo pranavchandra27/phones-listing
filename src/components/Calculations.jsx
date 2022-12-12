@@ -19,9 +19,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
-import { upperFirst, startCase } from "lodash";
+import { upperFirst } from "lodash";
 
 import { PhoneContext } from "../context";
+import { Calculate } from "@mui/icons-material";
 
 const Calculations = () => {
   const { selectedCurrency, selectedPhone } = useContext(PhoneContext);
@@ -114,15 +115,24 @@ const Calculations = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Container maxWidth="md">
+      <Container maxWidth={priceData ? "md" : "sm"}>
         <Box mt={2}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={priceData ? 6 : 12}>
-              <Paper>
+              <Paper elevation={4}>
                 <Box sx={{ padding: 2 }}>
-                  <Typography align="center" variant="h4">
-                    Calculate Price
-                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Calculate fontSize="large" color="primary" />
+                    <Typography sx={{ ml: 1 }} align="center" variant="h5">
+                      Calculate Price
+                    </Typography>
+                  </Box>
                   <form onSubmit={handleSubmit}>
                     <Stack spacing={2} mt={2}>
                       <TextField
@@ -199,7 +209,7 @@ const Calculations = () => {
                         type="number"
                         name="condition"
                         label="Condition"
-                        placeholder="Eg. 80 as 80%"
+                        placeholder="Phone's condition 0 to 100"
                         onChange={handleChange}
                         value={formData.condition}
                       />
@@ -247,7 +257,10 @@ const Calculations = () => {
                           <Box>
                             <Typography>OS: {priceData?.data.os}</Typography>
                             <Typography>
-                              Score: {priceData?.data.score || "N/A"}
+                              Score:{" "}
+                              {priceData?.data.score
+                                ? priceData?.data.score
+                                : selectedPhone.score || "N/A"}
                             </Typography>
 
                             <Box mt={3}>

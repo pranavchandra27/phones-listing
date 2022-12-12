@@ -6,20 +6,24 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { IconButton } from "@mui/material";
 import { Home } from "@mui/icons-material";
 
 import { PhoneContext } from "../context";
+import { Stack } from "@mui/system";
 
 const Header = () => {
   const navigate = useNavigate();
   const { selectedCurrency, setSelectedCurrency } = useContext(PhoneContext);
+  const location = useLocation();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [currencies, setCurrencies] = useState([]);
   const open = Boolean(anchorEl);
+
+  console.log(location);
 
   useEffect(() => {
     axios.get("https://api.coinstats.app/public/v1/fiats").then((res) => {
@@ -66,24 +70,43 @@ const Header = () => {
               </Typography>
             </Box>
 
-            <Button
-              size="large"
-              color="inherit"
-              aria-haspopup="true"
-              onClick={handleClick}
-              startIcon={
-                <img
-                  loading="lazy"
-                  width="20"
-                  style={{ borderRadius: "20%" }}
-                  src={selectedCurrency?.imageUrl}
-                  srcSet={`${selectedCurrency?.imageUrl} 2x`}
-                  alt=""
-                />
-              }
-            >
-              {selectedCurrency?.name}
-            </Button>
+            <Stack direction="row" spacing={2}>
+              {location.pathname !== "/" && (
+                <Button
+                  size="large"
+                  color="inherit"
+                  onClick={() => {
+                    navigate(
+                      location.pathname.includes("products")
+                        ? "/calculations"
+                        : "/products"
+                    );
+                  }}
+                >
+                  {location.pathname.includes("products")
+                    ? "Calculation"
+                    : "Products"}
+                </Button>
+              )}
+              <Button
+                size="large"
+                color="inherit"
+                aria-haspopup="true"
+                onClick={handleClick}
+                startIcon={
+                  <img
+                    loading="lazy"
+                    width="20"
+                    style={{ borderRadius: "20%" }}
+                    src={selectedCurrency?.imageUrl}
+                    srcSet={`${selectedCurrency?.imageUrl} 2x`}
+                    alt=""
+                  />
+                }
+              >
+                {selectedCurrency?.name}
+              </Button>
+            </Stack>
             <Menu
               sx={{ maxHeight: 200 }}
               anchorEl={anchorEl}
@@ -103,6 +126,7 @@ const Header = () => {
             >
               {currencies?.map((cur) => (
                 <MenuItem
+                  key={cur}
                   onClick={() => {
                     setSelectedCurrency(cur);
                     handleClose();
